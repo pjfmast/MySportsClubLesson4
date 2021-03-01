@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +26,22 @@ namespace MvcSportsClub {
             // whenever an IMemberRepository is needed a EFMemberRepository is created.
             services.AddTransient<IMemberRepository, EFMemberRepository>();
             services.AddTransient<IWorkoutRepository, EFWorkoutRepository>();
+
+            // todo stap 2a: registreer services voor Identity:
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<SportsClubContext>();
+
+            // todo stap 9a - testen registreren en check op password
+            // todo stap 9b - configureren check op password
+            //    (Kan ook als parameter in AddIdentity worden ingesteld.)
+            services.Configure<IdentityOptions>(
+                options => {
+                    // voor stap 9b: Configuration check on password:
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequiredUniqueChars = 5;
+                    options.Password.RequiredLength = 8;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,8 +55,10 @@ namespace MvcSportsClub {
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
+
+            // todo stap 2b. Add middleware for Authentication 
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
