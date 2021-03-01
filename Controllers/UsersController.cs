@@ -71,12 +71,14 @@ namespace MvcSportsClub.Controllers {
 
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model) {
-            // todo stap-14: maak controller-action voor [HhtpPost] Login.
+            // todo stap-14: maak controller-action voor [HttpPost] Login.
             if (ModelState.IsValid) {
                 Microsoft.AspNetCore.Identity.SignInResult result
                     = await signInManager.PasswordSignInAsync(
-                            model.Name, model.Password, 
-                            isPersistent:false, lockoutOnFailure:false);
+                            model.Name, 
+                            model.Password, 
+                            isPersistent:false, 
+                            lockoutOnFailure:false);
 
                 if (result.Succeeded) {
                     return RedirectToAction("Index", "Home");

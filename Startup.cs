@@ -42,10 +42,25 @@ namespace MvcSportsClub {
                     options.Password.RequiredUniqueChars = 5;
                     options.Password.RequiredLength = 8;
                 });
+
+            // todo stap-16c: indien gebruik niet ingelogd is, voor geauthoriseerde acties omleiden naar Login.
+            // De default redirect naar Login URL in Identity is: /Account/Login
+            // Dit kun je op deze manier wijzigen:
+            services.ConfigureApplicationCookie(
+                options => {
+                    // voor stap 16c configureren:
+                    options.LoginPath = "/Users/Login";
+
+                    // todo stap-19a configureren: acces denied
+                    //options.AccessDeniedPath = "/Users/AccessDenied";
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env
+            , UserManager<IdentityUser> userManager
+            , RoleManager<IdentityRole> roleManager
+            ) {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             } else {
@@ -60,7 +75,12 @@ namespace MvcSportsClub {
             // todo stap 2b. Add middleware for Authentication 
             app.UseAuthentication();
 
+            // todo stap 2c. Add middleware for Authorization
             app.UseAuthorization();
+
+            // todo stap-17. Seed Identity EF store with roles and users
+            UserAndRoleDataInitializer.SeedRoles(roleManager);
+            UserAndRoleDataInitializer.SeedUsers(userManager);
 
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllerRoute(

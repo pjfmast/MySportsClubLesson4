@@ -1,4 +1,5 @@
-﻿using MvcSportsClub.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using MvcSportsClub.Models;
 using MySportsClub.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MvcSportsClub.Data {
     public static class FakeData {
-
+       
         public static List<Member> FakeMembers
             = new List<Member> {
                 new Member{ID= 1, Name = "Esther", StartMembership = new DateTime(2014, 10, 8)},
@@ -56,5 +57,6 @@ namespace MvcSportsClub.Data {
                 new Enrollment{ID= 10,MemberID=4, WorkoutID=10},
                 new Enrollment{ID= 11,MemberID=4, WorkoutID=13},
             };
+
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,21 @@ using MvcSportsClub.Models;
 
 namespace MvcSportsClub.Controllers
 {
+    // todo stap-16a - Apply authorisation without roles. 
+    // Here: only allow access to any authenticated user
+    [Authorize]
     public class WorkoutsController : Controller {
         private readonly IWorkoutRepository repository;
 
-        // Indien de IWorkoutrepository niet ConfiguerServices geregistreerd:
+        // Indien de IWorkoutrepository niet ConfigureServices geregistreerd:
         // InvalidOperationException: Unable to resolve service for type 'MvcSportsClub.Models.IWorkoutRepository' while attempting to activate 'MvcSportsClub.Controllers.WorkoutsController'.
         public WorkoutsController(IWorkoutRepository repository) {
             this.repository = repository;
         }
 
         // GET: Workouts
+        // todo stap-16b: allow acces to non-authenticated users
+        [AllowAnonymous]
         public async Task<IActionResult> Index() {
             return View(await repository.FindAllAsync());
         }

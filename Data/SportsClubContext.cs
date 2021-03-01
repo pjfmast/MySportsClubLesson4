@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MvcSportsClub.Models;
+using System.Collections.Generic;
 
 namespace MvcSportsClub.Data {
     // todo stap 1: extend from IdentityDbContext
@@ -38,6 +40,7 @@ namespace MvcSportsClub.Data {
             modelBuilder.Entity<Member>().HasData(FakeData.FakeMembers);
             modelBuilder.Entity<Workout>().HasData(FakeData.FakeWorkouts);
             modelBuilder.Entity<Enrollment>().HasData(FakeData.FakeEnrollments);
+
         }
     }
 }
