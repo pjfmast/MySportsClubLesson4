@@ -52,7 +52,7 @@ namespace MvcSportsClub {
                     options.LoginPath = "/Users/Login";
 
                     // todo stap-19a configureren: acces denied
-                    //options.AccessDeniedPath = "/Users/AccessDenied";
+                    options.AccessDeniedPath = "/Users/AccessDenied";
                 });
         }
 

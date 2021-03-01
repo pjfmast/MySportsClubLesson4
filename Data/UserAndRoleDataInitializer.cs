@@ -3,13 +3,7 @@
 
 namespace MvcSportsClub.Data {
     public static class UserAndRoleDataInitializer {
-        public static void SeedData(
-              UserManager<IdentityUser> userManager
-            , RoleManager<IdentityRole> roleManager) {
-            SeedRoles(roleManager);
-            SeedUsers(userManager);
-        }
-
+        
         public static void SeedRoles(RoleManager<IdentityRole> roleManager) {
             if (!roleManager.RoleExistsAsync("Admin").Result) {
                 IdentityRole role = new IdentityRole();

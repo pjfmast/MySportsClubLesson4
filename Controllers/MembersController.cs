@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using MvcSportsClub.Data;
 using MvcSportsClub.Models;
 
-namespace MvcSportsClub.Controllers
-{
+namespace MvcSportsClub.Controllers {
+    // todo stap-18a: authorisatie met rollen
+    [Authorize(Roles = "Admin,Desk")]
     public class MembersController : Controller
     {
         private readonly IMemberRepository repository;
