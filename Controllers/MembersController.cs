@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MvcSportsClub.Models;
 
 namespace MvcSportsClub.Controllers {
-    // todo stap-18a: authorisatie met rollen
+    // todo stap-17: authorisatie met rollen
     [Authorize(Roles = "Admin,Desk")]
     public class MembersController : Controller
     {

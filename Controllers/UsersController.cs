@@ -44,7 +44,7 @@ namespace MvcSportsClub.Controllers {
             if (ModelState.IsValid) {
                 // todo stap 8: maak controller-action voor [HhtpPost] Register.
                 IdentityUser user = new IdentityUser {
-                    UserName = model.Name
+                  UserName = model.Name
                 , Email = model.Email
                 };
 

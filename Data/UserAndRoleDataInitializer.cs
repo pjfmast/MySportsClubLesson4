@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-
+using System.Security.Claims;
 
 namespace MvcSportsClub.Data {
     public static class UserAndRoleDataInitializer {
@@ -36,6 +36,17 @@ namespace MvcSportsClub.Data {
                 }
             }
 
+            if (userManager.FindByEmailAsync("Henk").Result == null) {
+                IdentityUser user = new IdentityUser();
+                user.UserName = "Henk";
+                user.Email = "henk@avd.nl";
+
+                IdentityResult result = userManager.CreateAsync(user, "Henkisok").Result;
+
+                if (result.Succeeded) {
+                    userManager.AddToRoleAsync(user, "Member").Wait();
+                }
+            }
 
             if (userManager.FindByEmailAsync("Anne").Result == null) {
                 IdentityUser user = new IdentityUser();

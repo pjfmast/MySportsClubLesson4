@@ -8,6 +8,7 @@ namespace MvcSportsClub.Data {
     // todo stap 1: extend from IdentityDbContext
     public class SportsClubContext:IdentityDbContext {
         public SportsClubContext(DbContextOptions<SportsClubContext> options)
+            // todo stap 1b. call base class constructor (to solve error message when adding a migration)
             : base(options){
         }
 
@@ -28,9 +29,8 @@ namespace MvcSportsClub.Data {
         */
         // OnModelCreating 'stuurt' de creatie van migrations
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            // todo stap 3. call base class constructor (to solve error message when adding a migration)
-            // todo stap 4a in Package Manger Console: add-migration
-            // todo stap 4b in Package Manger Console: update-database
+            // todo stap 4a in Package Manager Console: add-migration
+            // todo stap 4b in Package Manager Console: update-database
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Member>().ToTable("Member");

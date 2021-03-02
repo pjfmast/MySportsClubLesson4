@@ -51,7 +51,7 @@ namespace MvcSportsClub {
                     // voor stap 16c configureren:
                     options.LoginPath = "/Users/Login";
 
-                    // todo stap-19a configureren: acces denied
+                    // todo stap-18 configureren: acces denied
                     options.AccessDeniedPath = "/Users/AccessDenied";
                 });
         }
@@ -78,7 +78,7 @@ namespace MvcSportsClub {
             // todo stap 2c. Add middleware for Authorization
             app.UseAuthorization();
 
-            // todo stap-17. Seed Identity EF store with roles and users
+            // todo stap-15. Seed Identity EF store with roles and users
             UserAndRoleDataInitializer.SeedRoles(roleManager);
             UserAndRoleDataInitializer.SeedUsers(userManager);
 
