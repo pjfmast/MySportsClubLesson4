@@ -25,7 +25,7 @@ namespace MvcSportsClub.Controllers
 
         // GET: Workouts
         // todo stap-16b: allow acces to non-authenticated users
-        //[AllowAnonymous]
+        [AllowAnonymous]
         public async Task<IActionResult> Index() {
             return View(await repository.FindAllAsync());
         }

@@ -33,6 +33,7 @@ namespace MvcSportsClub.Data {
 
                 if (result.Succeeded) {
                     userManager.AddToRoleAsync(user, "Admin").Wait();
+                    userManager.AddToRoleAsync(user, "Desk").Wait();
                 }
             }
 
