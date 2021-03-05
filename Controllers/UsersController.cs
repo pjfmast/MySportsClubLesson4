@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,8 +33,8 @@ namespace MvcSportsClub.Controllers {
         [AllowAnonymous]
         public IActionResult AccessDenied(string returnUrl) {
             return new ObjectResult("Foei " + User.Identity.Name + "! Daar mag jij niet komen!");
-        // betere mogelijkheid:
-        //    //return RedirectToAction(returnUrl);
+            // betere mogelijkheid:
+            //    //return RedirectToAction(returnUrl);
         }
 
         [HttpGet]
@@ -44,7 +47,7 @@ namespace MvcSportsClub.Controllers {
             if (ModelState.IsValid) {
                 // todo stap 8: maak controller-action voor [HhtpPost] Register.
                 IdentityUser user = new IdentityUser {
-                  UserName = model.Name
+                    UserName = model.Name
                 , Email = model.Email
                 };
 
@@ -75,10 +78,10 @@ namespace MvcSportsClub.Controllers {
             if (ModelState.IsValid) {
                 Microsoft.AspNetCore.Identity.SignInResult result
                     = await signInManager.PasswordSignInAsync(
-                            model.Name, 
-                            model.Password, 
-                            isPersistent:false, 
-                            lockoutOnFailure:false);
+                            model.Name,
+                            model.Password,
+                            isPersistent: false,
+                            lockoutOnFailure: false);
 
                 if (result.Succeeded) {
                     return RedirectToAction("Index", "Home");
@@ -89,5 +92,57 @@ namespace MvcSportsClub.Controllers {
             return View(model);
         }
 
+        // todo 5-4a Add GoogleLogin action
+        [AllowAnonymous]
+        public IActionResult GoogleLogin(string returnUrl) {
+            string redirectUrl = Url.Action("GoogleResponse", "Users",
+                new { ReturnUrl = returnUrl });
+            AuthenticationProperties properties
+                = signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+
+            // A ChallengeResult is an ActionResult that when executed, 
+            // challenges the given authentication schemes' handler. 
+            // here:  causes ASP.NET Core Identity to respond to an unauthorized error 
+            //          by redirecting the user to the Google authentication page 
+
+            // todo stap 4a: trigger external login (Google)
+            return new ChallengeResult(GoogleDefaults.AuthenticationScheme,
+                properties);
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> GoogleResponse(string returnUrl = "/") {
+
+            // todo stap 5-4b: handle response from Google authentication service
+
+            ExternalLoginInfo info = await signInManager.GetExternalLoginInfoAsync();
+            if (info == null) {
+                return RedirectToAction(nameof(Login));
+            }
+            // todo stap 5-4c use: signInManager.ExternalLoginSignInAsync:
+            //     Signs in a user via a previously registered third party login, as an asynchronous operation.
+            Microsoft.AspNetCore.Identity.SignInResult result
+                = await signInManager.ExternalLoginSignInAsync(
+                    info.LoginProvider, info.ProviderKey, false);
+
+
+            if (result.Succeeded) {
+                return Redirect(returnUrl);
+            } else {
+                IdentityUser user = new IdentityUser {
+                    Email = info.Principal.FindFirst(ClaimTypes.Email).Value,
+                    UserName = info.Principal.FindFirst(ClaimTypes.Email).Value
+                };
+                IdentityResult identityResult = await userManager.CreateAsync(user);
+                if (identityResult.Succeeded) {
+                    identityResult = await userManager.AddLoginAsync(user, info);
+                    if (identityResult.Succeeded) {
+                        await signInManager.SignInAsync(user, false);
+                        return Redirect(returnUrl);
+                    }
+                }
+                return AccessDenied(returnUrl);
+            }
+        }
     }
 }

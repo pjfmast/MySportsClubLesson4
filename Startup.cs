@@ -54,6 +54,29 @@ namespace MvcSportsClub {
                     // todo stap-18 configureren: acces denied
                     options.AccessDeniedPath = "/Users/AccessDenied";
                 });
+
+            // todo stap 5-1a: installeer Microsoft.AspNetCore.Authentication.Google
+            //  In package manager console: Install-Package Microsoft.AspNetCore.Authentication.Google -Version 3.1.2
+            // todo stap 5-1b: maak voor Google sign-in een client ID. Zie: https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin
+            // todo stap 5-2a: enable secret storage voor opslag ClientId en ClientSecret. Zie https://docs.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-3.1&tabs=windows#enable-secret-storage
+            // todo stap 5-2b: store ClientId en ClientSecret. Zie https://docs.microsoft.com/en-us/aspnet/core/security/authentication/social/google-logins?view=aspnetcore-3.1#store-google-clientid-and-clientsecret
+
+            // Voor les 5. Na het registreren van onze asp.net appicatie als Client bij Google Services
+            // Your Client ID: 715995463169-abe2cfn259j40he7pp3c0u9jc3mse9v4.apps.googleusercontent.com
+            // Your Client Secret: 8mzFpwqlY5ahWo2yRVuAvVFS
+
+            // todo 5-1 voeg Goegle service voor authenticatie toe.
+            services
+                .AddAuthentication()
+                .AddGoogle(options => {
+                    IConfigurationSection googleAuthNSection =
+                    Configuration.GetSection("Authentication:Google");
+
+                    options.ClientId = googleAuthNSection["ClientId"];
+                    options.ClientSecret = googleAuthNSection["ClientSecret"];
+
+                });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +100,7 @@ namespace MvcSportsClub {
 
             // todo stap 2c. Add middleware for Authorization
             app.UseAuthorization();
+
 
             // todo stap-15. Seed Identity EF store with roles and users
             UserAndRoleDataInitializer.SeedRoles(roleManager);

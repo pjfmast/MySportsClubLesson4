@@ -16,7 +16,7 @@
             <input class="form-control" asp-for="Name" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
- 
+
         <div class="form-group">
             <label asp-for="Password"></label>
             <input class="form-control" asp-for="Password" />
@@ -25,6 +25,10 @@
 
 
         <button class="btn btn-primary" type="submit">Login</button>
+
+        <!--todo stap 5-3a: maak navigatie links aan om in te loggen met Google authentication -->
+        <a class="btn btn-info" asp-action="GoogleLogin" asp-route-returnUrl="@ViewBag.returnUrl">Google Login</a>
+
     </form>
 </div>
     
